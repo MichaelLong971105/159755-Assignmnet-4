@@ -200,7 +200,7 @@ merged_df['HARatio'] = merged_df['AvgH'] / (merged_df['AvgA'] + eps)
 merged_df['DARatio'] = merged_df['AvgD'] / (merged_df['AvgA'] + eps)
 
 # Save the csv file to dataset folder
-# merged_df.to_csv(os.path.join(folder_path, 'final.csv'), index=False)
+merged_df.to_csv(os.path.join(folder_path, 'final.csv'), index=False)
 # print(f"\n Merged dataset saved to: {os.path.join(folder_path, 'final.csv')}")
 
 # Features
