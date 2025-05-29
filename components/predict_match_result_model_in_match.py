@@ -10,12 +10,6 @@ from sklearn.model_selection import cross_val_predict
 import matplotlib.pyplot as plt
 import seaborn as sns  # Load Datasets
 
-
-pd.set_option('display.max_rows', 100)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
-pd.set_option('display.max_colwidth', None)
-
 folder_path = '../data/in_match_predict'
 save_path = "../models"
 
