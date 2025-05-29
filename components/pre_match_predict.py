@@ -1,10 +1,10 @@
 # components/pre_match_predict.py
 import os
 import sqlite3
-
 import numpy as np
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
 from components.predict_match_result_model_pre_match import predict_match_result
 
 def show_all_teams(mode):
@@ -89,3 +89,37 @@ def show_all_teams(mode):
                 - Away Win Probability: **{result['probabilities']['Away Win']}**
                 - Away win odds: **{b365_a}**
                 """)
+
+            st.markdown("---")
+            st.markdown("### 📊 Team Attribute Radar Chart")
+            fig = plot_team_radar(row_home, row_away, team_home, team_away)
+            st.pyplot(fig)
+
+
+def plot_team_radar(team1_stats, team2_stats, team1_name, team2_name):
+    labels = ['Overall', 'Attack', 'Midfield', 'Defence', 'Avg Age']
+    stats1 = [team1_stats['overall'], team1_stats['attack'], team1_stats['midfield'], team1_stats['defence'], team1_stats['starting_xi_avg_age']]
+    stats2 = [team2_stats['overall'], team2_stats['attack'], team2_stats['midfield'], team2_stats['defence'], team2_stats['starting_xi_avg_age']]
+
+    max_vals = [100, 100, 100, 100, 40]
+    stats1 = [a / b for a, b in zip(stats1, max_vals)]
+    stats2 = [a / b for a, b in zip(stats2, max_vals)]
+
+    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+    stats1 += stats1[:1]
+    stats2 += stats2[:1]
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+    ax.plot(angles, stats1, label=team1_name, color='blue')
+    ax.fill(angles, stats1, alpha=0.25, color='blue')
+    ax.plot(angles, stats2, label=team2_name, color='red')
+    ax.fill(angles, stats2, alpha=0.25, color='red')
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels)
+    ax.set_yticklabels([])
+    ax.set_title("Team Attribute Comparison", fontsize=14)
+    ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
+    plt.tight_layout()
+    return fig
