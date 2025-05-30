@@ -66,7 +66,7 @@ def predict_player_value(player_dict):
     log_pred = model.predict(df)[0]
     return np.exp(log_pred)
 
-#
-# if __name__ == '__main__':
-#     train_model()
+
+if __name__ == '__main__':
+    train_model()
 
