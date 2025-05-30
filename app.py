@@ -1,4 +1,4 @@
-# app.py (主程序入口)
+# app.py
 import os
 import pandas as pd
 import streamlit as st
