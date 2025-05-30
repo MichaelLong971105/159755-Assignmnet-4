@@ -3,8 +3,8 @@ import sqlite3
 import glob
 import os
 
-
-def save_match_data():
+base_path = os.path.dirname(os.path.abspath(__file__))
+def save_match_data(connection, cursor):
     create_match_stats = """CREATE TABLE match_stats (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         home_team TEXT NOT NULL,
@@ -82,8 +82,7 @@ def save_match_data():
     def map_team_name(name):
         return team_name.get(name, name)
 
-    match_path = "../data/match_data"
-    files = glob.glob(os.path.join(match_path, '**', '*.csv'), recursive=True)
+    files = os.path.join(base_path, '..', 'data/match_data', '*.csv')
 
     dataframes = []
 
@@ -114,9 +113,8 @@ def save_match_data():
     connection.commit()
 
 
-def save_team_data():
-    team_path = "../data/team_data"
-    files = glob.glob(os.path.join(team_path, '*.csv'))
+def save_team_data(connection, cursor):
+    files = os.path.join(base_path, '..', 'team_data', '*.csv')
 
     create_team_stats = """CREATE TABLE team_stats (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,9 +147,8 @@ def save_team_data():
     connection.commit()
 
 
-def save_player_data():
-    player_path = "../data/player_data"
-    files = glob.glob(os.path.join(player_path, '*.csv'))
+def save_player_data(connection, cursor):
+    files = os.path.join(base_path, '..', 'player_data', '*.csv')
 
     create_player_stats = """CREATE TABLE player_stats (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -218,10 +215,12 @@ def save_player_data():
     connection.commit()
 
 if __name__ == '__main__':
-    connection = sqlite3.connect('../data/allData.sl3')
+
+    database_path = os.path.join(base_path, '..', 'data', 'allData.sl3')
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
-    save_player_data()
-    save_team_data()
-    save_match_data()
+    save_match_data(connection, cursor)
+    save_team_data(connection, cursor)
+    save_player_data(connection, cursor)
     cursor.close()
     connection.close()
