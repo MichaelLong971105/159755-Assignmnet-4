@@ -25,8 +25,6 @@ def download_season_data(league, season_code, year, save_dir, name):
     except requests.RequestException as e:
         print(f"Failed to download {url}: {e}")
 
-
-# 遍历所有赛季
 for league in leagues:
     if league == ENGLAND:
         save_dir = "../data/match_data/England"
